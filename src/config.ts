@@ -32,7 +32,7 @@ export const config = {
   app: {
     name: getOsEnv('APP_NAME'),
     host: getOsEnv('APP_HOST'),
-    schema: getOsEnv('APP_SCHEMA'),
+    scheme: getOsEnv('APP_SCHEME'),
     routePrefix: getOsEnv('APP_ROUTE_PREFIX'),
     port: normalizePort(process.env.PORT || getOsEnv('APP_PORT')),
     banner: toBool(getOsEnv('APP_BANNER')),

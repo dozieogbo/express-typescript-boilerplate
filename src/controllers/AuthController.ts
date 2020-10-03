@@ -6,7 +6,7 @@ import { AuthResponse } from '../models/dtos/AuthResponse';
 import { Response } from '../models/dtos/Response';
 import { UserService } from '../services/UserService';
 import { BaseController } from './BaseController';
-import { messages } from 'src/constants/responses';
+import { messages } from '../constants/responses';
 
 class LoginDto {
   @IsEmail()

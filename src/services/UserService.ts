@@ -3,14 +3,14 @@ import { User } from '../models/entities/User';
 import { Logger, LoggerInterface } from '../decorators/Logger';
 import { messages as responseMessages } from '../constants/responses';
 import { Repository } from 'typeorm';
-import { OrmRepository } from 'typeorm-typedi-extensions';
-import { BadRequestError } from 'src/errors/BadRequestError';
+import { InjectRepository } from 'typeorm-typedi-extensions';
+import { BadRequestError } from '../errors/BadRequestError';
 
 @Service()
 export class UserService {
   constructor(
     @Logger(__filename) private log: LoggerInterface,
-    @OrmRepository() private userRepository: Repository<User>,
+    @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
   async create(user: Partial<User>): Promise<User> {
@@ -25,7 +25,7 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  async authenticate(email: string, password: string){
+  async authenticate(email: string, password: string): Promise<User>{
     const user = await this.getByEmail(email);
 
     if(user == null){
