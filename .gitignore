@@ -18,7 +18,7 @@ Thumbs.db
 src/api/schema.gql
 
 # Typing #
-typings/
+# typings/
 
 # Dist #
 dist/
