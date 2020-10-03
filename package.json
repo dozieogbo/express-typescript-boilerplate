@@ -5,7 +5,8 @@
     "test": "jest",
     "setup": "yarn",
     "start": "tsc && node dist/app.js",
-    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
   },
   "engines": {
     "node": ">=12.0.0"

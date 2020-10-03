@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
+import { UserRole } from '../../enums/UserRole';
 import { BeforeInsert, Column, Entity, /*OneToMany,*/ PrimaryColumn } from 'typeorm';
 
 @Entity()
@@ -39,6 +40,14 @@ export class User {
     @IsNotEmpty()
     @Column()
     public phoneNumber: string;
+
+    @IsNotEmpty()
+    @Column({
+        type: "enum",
+        enum: UserRole,
+        default: UserRole.USER
+    })
+    public role: UserRole;
 
     // @OneToMany(type => Pet, pet => pet.user)
     // public pets: Pet[];
