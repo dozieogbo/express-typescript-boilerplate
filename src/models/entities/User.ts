@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
 import { BeforeInsert, Column, Entity, /*OneToMany,*/ PrimaryColumn } from 'typeorm';
@@ -12,14 +12,6 @@ export class User {
                     return reject(err);
                 }
                 resolve(hash);
-            });
-        });
-    }
-
-    public static comparePassword(user: User, password: string): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            bcrypt.compare(password, user.password, (err, res) => {
-                resolve(res === true);
             });
         });
     }
@@ -57,6 +49,14 @@ export class User {
 
     public getFullName(): string {
         return `${this.firstName} ${this.lastName}`;
+    }
+
+    public comparePassword(password: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, this.password, (err, res) => {
+                resolve(res === true);
+            });
+        });
     }
 
     @BeforeInsert()

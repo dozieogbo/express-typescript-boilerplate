@@ -6,8 +6,9 @@ import bodyParser from 'body-parser';
 import { createExpressServer } from "routing-controllers";
 import config from './config';
 import container from './container';
+import database from './common/database';
 
-import { Logger } from './lib/logger';
+import { Logger } from './common/logger';
 
 /**
  * EXPRESS TYPESCRIPT BOILERPLATE
@@ -37,6 +38,8 @@ winston.configure({
 });
 
 container.setup();
+
+database.initialize();
 
 const app = createExpressServer({
     controllers: [__dirname + "/controllers/*.js"],

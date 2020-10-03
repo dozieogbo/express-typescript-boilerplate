@@ -3,7 +3,7 @@ import * as path from 'path';
 
 import {
     getOsEnv, getOsEnvOptional, getOsPath, getOsPaths, normalizePort, toBool, toNumber
-} from './lib/env';
+} from './common/env';
 
 /**
  * Load .env file or for tests the .env.test file.
@@ -43,13 +43,13 @@ export const env = {
         output: getOsEnv('LOG_OUTPUT'),
     },
     db: {
-        url: getOsEnv('DATABASE_URL'),
-        type: getOsEnv('DATABASE_CONNECTION'),
-        host: getOsEnvOptional('DATABASE_HOST'),
-        port: toNumber(getOsEnvOptional('DATABASE_PORT')),
-        username: getOsEnvOptional('DATABASE_USERNAME'),
-        password: getOsEnvOptional('DATABASE_PASSWORD'),
-        database: getOsEnv('DATABASE_NAME'),
+        url: getOsEnvOptional('TYPEORM_URL'),
+        type: getOsEnvOptional('TYPEORM_CONNECTION'),
+        host: getOsEnvOptional('TYPEORM_HOST'),
+        port: toNumber(getOsEnvOptional('TYPEORM_PORT')),
+        username: getOsEnvOptional('TYPEORM_USERNAME'),
+        password: getOsEnvOptional('TYPEORM_PASSWORD'),
+        database: getOsEnvOptional('TYPEORM_DATABASE'),
     },
     graphql: {
         enabled: toBool(getOsEnv('GRAPHQL_ENABLED')),

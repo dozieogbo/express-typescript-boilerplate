@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
-import { User } from '../../models/entities/User';
-import { Logger, LoggerInterface } from '../../decorators/Logger';
-import { messages as responseMessages } from '../../constants/responses';
+import { User } from '../models/entities/User';
+import { Logger, LoggerInterface } from '../decorators/Logger';
+import { messages as responseMessages } from '../constants/responses';
 import { Repository } from 'typeorm';
 import { OrmRepository } from 'typeorm-typedi-extensions';
 import { BadRequestError } from 'src/errors/BadRequestError';

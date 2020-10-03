@@ -1,6 +1,6 @@
 import { Connection, createConnection } from 'typeorm';
 import config from '../config';
-import { Logger } from '../lib/logger';
+import { Logger } from './logger';
 
 const log = new Logger(__filename);
 const options: any = {};
@@ -18,10 +18,14 @@ if (config.db.url) {
 export const createDatabaseConnection = async (): Promise<Connection> => {
   const connection = await createConnection({
     ...options,
-    migrations: [__dirname + 'src/data/migrations/**/*.ts'],
-    entities: [__dirname + 'src/models/entities/**/*.ts'],
-    synchronize: true,
-    logging: true,
+    migrations: config.app.dirs.migrations,
+    entities: config.app.dirs.entities,
+    synchronize: false,
+    logging: false,
+    cli: {
+      migrationsDir: config.app.dirs.migrationsDir,
+      entitiesDir: config.app.dirs.entitiesDir,
+    }
   });
 
   log.info(`Connected to ${connection.options.type} database`);
@@ -34,9 +38,29 @@ export const synchronizeDatabase = async (connection: Connection) => {
 };
 
 export const migrateDatabase = async (connection: Connection) => {
-  return connection.runMigrations();
+  log.info(`Processing ${connection.migrations.length} database migrations`);
+
+  const migrations = await connection.runMigrations();
+
+  log.info(`Executed ${migrations.length} database migrations`);
+
+  return migrations;
 };
 
 export const closeDatabase = (connection: Connection) => {
   return connection.close();
+};
+
+export const initialize = async () => {
+  const connection = await createDatabaseConnection();
+
+  await migrateDatabase(connection);
+};
+
+export default {
+  createDatabaseConnection,
+  synchronizeDatabase,
+  migrateDatabase,
+  closeDatabase,
+  initialize,
 };
