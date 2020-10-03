@@ -1,0 +1,6 @@
+{
+    "delay": "0",
+    "ext": "*.ts,*.json",
+    "exec": "npm run start",
+    "ignore": ["dist/"]
+}
