@@ -13,11 +13,11 @@ export class UserService {
     @OrmRepository() private userRepository: Repository<User>,
   ) {}
 
-  async create(user: User): Promise<User> {
+  async create(user: Partial<User>): Promise<User> {
     const existingUser = await this.getByEmail(user.email);
 
     if (existingUser) {
-      throw new BadRequestError(responseMessages.emailAlreadExists, 'email');
+      throw new BadRequestError(responseMessages.emailAlreadyExists, 'email');
     }
 
     this.log.info(`Creating user with email ${user.email}`);
@@ -25,7 +25,21 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
+  async authenticate(email: string, password: string){
+    const user = await this.getByEmail(email);
+
+    if(user == null){
+      return user;
+    }
+
+    return await user.comparePassword(password) ? user : null;
+  }
+
   async getByEmail(email: string): Promise<User> {
     return await this.userRepository.findOne({ email: email.toLowerCase() });
+  }
+
+  async getById(id: string): Promise<User> {
+    return await this.userRepository.findOne(id);
   }
 }

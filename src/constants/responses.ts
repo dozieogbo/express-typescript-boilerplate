@@ -1,3 +1,4 @@
 export const messages = {
-    emailAlreadExists: 'Email already exists'
+    emailAlreadyExists: 'Email already exists',
+    invalidLoginDetails: 'Email or password invalid',
 }
