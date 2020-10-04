@@ -1,8 +1,8 @@
-import { HttpError } from 'routing-controllers';
+import { UnauthorizedError as HttpError } from 'routing-controllers';
 
 export class UnauthorizedError extends HttpError {
-  constructor(message: string) {
-    super(401, message || 'Unauthorized');
+  constructor(message?: string) {
+    super(message || 'Unauthorized');
   }
 
   toJSON() {

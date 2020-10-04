@@ -1,0 +1,29 @@
+import * as express from 'express';
+import { ExpressErrorMiddlewareInterface, HttpError, Middleware } from 'routing-controllers';
+import { Logger, LoggerInterface } from '../decorators/Logger';
+import config from '../config';
+
+@Middleware({ type: 'after' })
+export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
+
+    public isProduction = config.isProduction;
+
+    constructor(
+        @Logger(__filename) private log: LoggerInterface
+    ) { }
+
+    public error(error: HttpError, req: express.Request, res: express.Response, next: express.NextFunction): void {
+        res.status(error.httpCode || 500);
+        res.json({
+            message: error.message
+        });
+
+        if (this.isProduction) {
+            this.log.error(error.name, error.message);
+        } else {
+            this.log.error(error.name, error.stack);
+        }
+
+    }
+
+}

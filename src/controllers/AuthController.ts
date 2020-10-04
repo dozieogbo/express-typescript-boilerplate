@@ -1,12 +1,12 @@
 import { IsEmail, IsNotEmpty, IsPhoneNumber } from 'class-validator';
-import { Body, JsonController, Post } from 'routing-controllers';
-import { BadRequestError } from '../errors/BadRequestError';
+import { Body/*, Get*/, JsonController, Post } from 'routing-controllers';
 import { JwtService } from '../services/JwtService';
 import { AuthResponse } from '../models/dtos/AuthResponse';
 import { Response } from '../models/dtos/Response';
 import { UserService } from '../services/UserService';
 import { BaseController } from './BaseController';
 import { messages } from '../constants/responses';
+import { BadRequestError/*, NotFoundError*/ } from '../errors';
 
 class LoginDto {
   @IsEmail()
@@ -36,7 +36,9 @@ export class AuthController extends BaseController {
     const user = await this.userService.authenticate(body.email, body.password);
 
     if (!user) {
-      throw new BadRequestError(messages.invalidLoginDetails);
+      throw new BadRequestError({
+        message: messages.INVALID_LOGIN_DETAILS
+      });
     }
 
     const tokenResult = this.jwtService.sign(user.id);

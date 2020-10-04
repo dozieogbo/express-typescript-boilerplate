@@ -1,8 +1,8 @@
-import { HttpError } from 'routing-controllers';
+import { NotFoundError as HttpError } from 'routing-controllers';
 
 export class NotFoundError extends HttpError {
-  constructor(message: string) {
-    super(404, message || 'Resource not found');
+  constructor(message?: string) {
+    super(message || 'Resource not found');
   }
 
   toJSON() {

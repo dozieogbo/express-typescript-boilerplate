@@ -1,25 +1,26 @@
 import { HttpError } from 'routing-controllers';
 
-export class BadRequestError extends HttpError {
-  private property: string;
-  private errorMessage: string;
+interface Error {
+  message: string; 
+  property?: string
+}
 
-  constructor(message: string, property?: string) {
+export class BadRequestError extends HttpError {
+  private errors: Error[];
+
+  constructor({ message, property }: Error) {
     super(400, 'Invalid request');
 
-    this.property = property;
-    this.errorMessage = message;
+    this.errors = [{
+      message,
+      property
+    }];
   }
 
   toJSON() {
     return {
       message: this.message,
-      errors: [
-        {
-          message: this.errorMessage,
-          property: this.property,
-        },
-      ],
+      errors: this.errors
     };
   }
 }

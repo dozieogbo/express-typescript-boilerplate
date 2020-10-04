@@ -6,6 +6,7 @@ import winston, { format } from 'winston';
 import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
 import { createExpressServer } from 'routing-controllers';
+import { authorizationChecker, currentUserChecker } from './auth';
 import config from './config';
 import container from './container';
 import swaggerDoc from './swagger';
@@ -38,35 +39,37 @@ winston.configure({
 
 container.setup();
 
-database.initialize();
+database.initialize().then(() => {
+  const app: Express = createExpressServer({
+    cors: true,
+    controllers: [__dirname + '/controllers/*.js'],
+    middlewares: [__dirname + '/middlewares/*.js'],
+    interceptors: [__dirname + '/interceptors/*.js'],
+    routePrefix: config.app.routePrefix,
+    defaultErrorHandler: false,
+    currentUserChecker,
+    authorizationChecker,
+  });
 
-const app: Express = createExpressServer({
-  controllers: [ __dirname + '/controllers/*.js'],
-  middlewares: [__dirname + '/middlewares/*.js'],
-  interceptors: [__dirname + '/interceptors/*.js'],
-  routePrefix: config.app.routePrefix
+  app.use(
+    morgan('dev', {
+      stream: {
+        write: log.info.bind(log),
+      },
+    }),
+  );
+  app.use(bodyParser.json());
+  app.use(
+    bodyParser.urlencoded({
+      extended: true,
+    }),
+  );
+  app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+
+  app.listen(config.app.port || 3000, function () {
+    log.info(`Aloha, your app is ready on ${config.app.port}`);
+    log.info(`To shut it down, press <CTRL> + C at any time.`);
+    log.info(``);
+    log.info('-------------------------------------------------------');
+  });
 });
-
-app.use(
-  morgan('dev', {
-    stream: {
-      write: log.info.bind(log),
-    },
-  }),
-);
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  }),
-);
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
-
-const server = app.listen(config.app.port || 3000, function () {
-  log.info(`Aloha, your app is ready on ${config.app.port}`);
-  log.info(`To shut it down, press <CTRL> + C at any time.`);
-  log.info(``);
-  log.info('-------------------------------------------------------');
-});
-
-export default server;
