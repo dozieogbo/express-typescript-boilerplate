@@ -25,7 +25,6 @@ const swaggerDoc = routingControllersToSpec(
     },
   },
 );
-console.log(swaggerDoc);
 
 swaggerDoc.servers = [
   {
