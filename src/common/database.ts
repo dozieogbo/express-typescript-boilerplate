@@ -1,6 +1,7 @@
 import { Connection, createConnection } from 'typeorm';
 import config from '../config';
 import { Logger } from './logger';
+import { DbNamingStrategy } from './namingStrategy';
 
 const log = new Logger(__filename);
 const options: any = {};
@@ -16,17 +17,19 @@ if (config.db.url) {
 }
 
 export const createDatabaseConnection = async (): Promise<Connection> => {
-  const connection = await createConnection({
-    ...options,
-    migrations: config.app.dirs.migrations,
-    entities: config.app.dirs.entities,
-    synchronize: false,
-    logging: false,
-    cli: {
-      migrationsDir: config.app.dirs.migrationsDir,
-      entitiesDir: config.app.dirs.entitiesDir,
-    }
-  });
+  const connection = await createConnection(
+    Object.assign(options, {
+      migrations: config.app.dirs.migrations,
+      entities: config.app.dirs.entities,
+      synchronize: false,
+      logging: false,
+      cli: {
+        migrationsDir: config.app.dirs.migrationsDir,
+        entitiesDir: config.app.dirs.entitiesDir,
+      },
+      namingStrategy: new DbNamingStrategy(),
+    }),
+  );
 
   log.info(`Connected to ${connection.options.type} database`);
 

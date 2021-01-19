@@ -77,24 +77,16 @@ export const config = {
   },
   db: {
     url: getOsEnvOptional('TYPEORM_URL'),
-    type: getOsEnvOptional('TYPEORM_CONNECTION'),
+    type: getOsEnvOptional('TYPEORM_CONNECTION_TYPE'),
     host: getOsEnvOptional('TYPEORM_HOST'),
     port: toNumber(getOsEnvOptional('TYPEORM_PORT')),
     username: getOsEnvOptional('TYPEORM_USERNAME'),
     password: getOsEnvOptional('TYPEORM_PASSWORD'),
     database: getOsEnvOptional('TYPEORM_DATABASE'),
   },
-  swagger: {
-    enabled: toBool(getOsEnv('SWAGGER_ENABLED')),
-    route: getOsEnv('SWAGGER_ROUTE'),
-    username: getOsEnv('SWAGGER_USERNAME'),
-    password: getOsEnv('SWAGGER_PASSWORD'),
-  },
   monitor: {
     enabled: toBool(getOsEnv('MONITOR_ENABLED')),
-    route: getOsEnv('MONITOR_ROUTE'),
-    username: getOsEnv('MONITOR_USERNAME'),
-    password: getOsEnv('MONITOR_PASSWORD'),
+    route: getOsEnv('MONITOR_ROUTE')
   },
 };
 

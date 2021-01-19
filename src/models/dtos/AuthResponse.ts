@@ -1,7 +1,9 @@
 import { User } from '../entities/User';
 
-export interface AuthResponse {
+export class AuthResponse {
     user: User;
+
     accessToken?: string;
+    
     expiryDate?: Date;
 }

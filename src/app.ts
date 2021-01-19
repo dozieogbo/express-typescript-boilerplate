@@ -9,6 +9,7 @@ import { createExpressServer } from 'routing-controllers';
 import { authorizationChecker, currentUserChecker } from './auth';
 import config from './config';
 import container from './container';
+import monitor from './monitor';
 import swaggerDoc from './swagger';
 import database from './common/database';
 
@@ -64,7 +65,11 @@ database.initialize().then(() => {
       extended: true,
     }),
   );
-  app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+
+  if(config.monitor.enabled) {
+    app.use(monitor);
+  }
 
   app.listen(config.app.port || 3000, function () {
     log.info(`Aloha, your app is ready on ${config.app.port}`);

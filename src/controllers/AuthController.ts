@@ -1,12 +1,13 @@
 import { IsEmail, IsNotEmpty, IsPhoneNumber } from 'class-validator';
 import { Body/*, Get*/, JsonController, Post } from 'routing-controllers';
+import { ResponseSchema } from 'routing-controllers-openapi';
 import { JwtService } from '../services/JwtService';
 import { AuthResponse } from '../models/dtos/AuthResponse';
-import { Response } from '../models/dtos/Response';
 import { UserService } from '../services/UserService';
 import { BaseController } from './BaseController';
 import { messages } from '../constants/responses';
 import { BadRequestError/*, NotFoundError*/ } from '../errors';
+import { Response } from '../models/dtos/Response';
 
 class LoginDto {
   @IsEmail()
@@ -31,6 +32,7 @@ export class AuthController extends BaseController {
     super();
   }
 
+  @ResponseSchema(AuthResponse)
   @Post('/login')
   public async login(@Body() body: LoginDto): Promise<Response<AuthResponse>> {
     const user = await this.userService.authenticate(body.email, body.password);
