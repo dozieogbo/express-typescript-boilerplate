@@ -1,12 +1,10 @@
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { defaultMetadataStorage as classTransformerMetadataStorage } from 'class-transformer/storage';
 import { getMetadataArgsStorage } from 'routing-controllers';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
 import config from './config';
 import { AuthController } from './controllers/AuthController';
 
 const schemas = validationMetadatasToSchemas({
-  classTransformerMetadataStorage,
   refPointerPrefix: '#/components/schemas/',
 });
 
