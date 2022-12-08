@@ -11,6 +11,7 @@ if (config.db.url) {
 } else {
   options.host = config.db.host;
   options.type = config.db.type;
+  options.port = config.db.port;
   options.database = config.db.database;
   options.username = config.db.username;
   options.password = config.db.password;
